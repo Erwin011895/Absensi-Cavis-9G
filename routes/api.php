@@ -18,3 +18,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::post('/logging', 'PicketController@logging');
+Route::get('/getLoginList', 'PicketController@getLoginList');

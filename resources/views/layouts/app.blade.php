@@ -81,8 +81,7 @@
             <ul class="nav nav-pills">
                 <!-- <li role="presentation" class="active"><a href="#">Cavis</a></li> -->
                 <li role="presentation"><a href="{{action('CavisController@index')}}">Cavis</a></li>
-                <li role="presentation"><a href="{{action('PicketController@index')}}">Picket</a></li>
-                <li role="presentation"><a href="#">Summary</a></li>
+                <li role="presentation"><a href="{{action('PicketController@index')}}">Summary Picket</a></li>
             </ul>
         </div>
 

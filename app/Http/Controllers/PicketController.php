@@ -13,7 +13,20 @@ class PicketController extends Controller
 {
     public function index()
     {
-    	return "0";
+    	$data = [];
+    	$data['cavis'] = Cavis::all();
+    	$data['menit'] = [];
+    	foreach ($data['cavis'] as $c) {
+    		$pickets = $c->pickets;
+    		$total = 0;
+    		foreach ($pickets as $p) {
+    			$total += date_diff($p->created_at, $p->updated_at, true)->i;
+    		}
+    		$data['menit'][] = $total;
+    	}
+    	return view('admin.picket.index', [
+    		'data' => $data
+    	]);
     }
 
     // API
@@ -29,15 +42,6 @@ class PicketController extends Controller
 
     	if ($cavis != null) {
 	    	$pickets = $cavis->pickets()->where('created_at', 'LIKE', date('Y-m-d').'%')->get();
-	    	// if ($pickets==null) {
-	    	// 	// Login First time
-	    	// 	$picket = $cavis->pickets()->create([
-	    	// 		'random_text' => str_random()
-	    	// 	]);
-	    	// 	$response['status'] = 'success';
-	    	// 	$response['message'] = '1. Logged In at ' . $picket->updated_at;
-	    	// }
-	    	// else{}
 	    	$picket = null;
 	    		foreach ($pickets as $p) {
 	    			if ($p->created_at == $p->updated_at) {
@@ -52,7 +56,7 @@ class PicketController extends Controller
 		    			'random_text' => str_random()
 		    		]);
 		    		$response['status'] = 'success';
-		    		$response['message'] = '2. Logged In at ' . $picket->updated_at;
+		    		$response['message'] = $cavis->name.'<br>Logged In at ' . $picket->updated_at;
 	    		} else {
 	    			// Logout current cavis
 	    			$picket->random_text = str_random();
@@ -60,7 +64,7 @@ class PicketController extends Controller
 	    			$cavis->pickets()->save($picket);
 	    			// $cavis->save();
 	    			$response['status'] = 'success';
-	    			$response['message'] = 'Logged Out at ' . $picket->updated_at;
+	    			$response['message'] = $cavis->name.'<br>Logged Out at ' . $picket->updated_at;
 	    		}
 	    		
 	    	// }
@@ -69,8 +73,23 @@ class PicketController extends Controller
     		$response['message'] = 'cavis not found';
     	}
     	
-
     	return response($response, 200);
+    }
+
+    public function getLoginList()
+    {
+    	$response = [];
+    	$cavisName = [];
+    	$todayPickets = Picket::where('created_at', "LIKE", date('Y-m-d').'%')->get();
+    	if ($todayPickets != null) {
+    		foreach ($todayPickets as $tp) {
+    			if ($tp->created_at == $tp->updated_at) {
+    				$cavisName[] = $tp->cavis->name;
+    			}
+    		}
+    		$response['cavisName'] = $cavisName;
+    	}
+    	return $response;
     }
 }
 

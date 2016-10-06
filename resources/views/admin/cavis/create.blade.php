@@ -13,7 +13,7 @@
 
 		<div class="input-group">
 			<span class="input-group-addon" id="basic-addon1">Name</span>
-			<input type="text" class="form-control" placeholder="Nim" aria-describedby="basic-addon1" name="name">
+			<input type="text" class="form-control" placeholder="Nama" aria-describedby="basic-addon1" name="name">
 		</div>
 
 		{{Form::submit('Add', ['class' => 'btn btn-success'])}}
