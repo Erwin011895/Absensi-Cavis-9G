@@ -11,6 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/', 'AbsenceController@index');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
+
+Route::group(['prefix' => 'admin'], function(){
+	Route::resource('cavis', 'CavisController');
+	Route::resource('picket', 'PicketController');
 });
